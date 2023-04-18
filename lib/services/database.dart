@@ -1,0 +1,98 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+final db = FirebaseFirestore.instance;
+final user = FirebaseAuth.instance.currentUser!;
+List<Map<String, dynamic>> allBooks = [];
+
+class FireStore {
+  final time = DateTime.now().toLocal().toString().substring(0, 19);
+
+  Future createBook({
+    required String bookId,
+    required String title,
+    required String author,
+    required String publisher,
+    required String description,
+    required int noOfPages,
+  }) async {
+    final doc = db.collection('allBooks').doc(bookId);
+
+    final json = {
+      'bookId': bookId,
+      'title': title,
+      'author': author,
+      'publisher': publisher,
+      'description': description,
+      'noOfPages': noOfPages,
+      'createdAt': time,
+      'modifiedAt': time,
+    };
+
+    await doc.set(json);
+  }
+
+  Future createBookRating({
+    required String bookId,
+    required int ratings,
+  }) async {
+    final doc = db.collection('allBooks').doc(bookId).collection('ratings').doc(user.uid);
+
+    final json = {
+      'bookId': bookId,
+      'ratings': ratings,
+      'createdAt': time,
+    };
+
+    await doc.set(json);
+  }
+
+  Stream<List> readBooks({required String orderBy, required bool descending}) => db
+      .collection('allBooks')
+      .orderBy(orderBy, descending: descending)
+      .snapshots()
+      .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
+
+  Future updateBook({
+    required String bookId,
+    required String title,
+    required String author,
+    required String publisher,
+    required String description,
+    required int noOfPages,
+  }) async {
+    final doc = db.collection('books').doc(bookId);
+
+    doc.update({
+      'title': title,
+      'author': author,
+      'publisher': publisher,
+      'description': description,
+      'noOfPages': noOfPages,
+      'modifiedAt': time,
+    });
+  }
+
+  Future deleteBook({
+    required String bookId,
+    required String title,
+    required String author,
+    required String publisher,
+    required String description,
+    required int noOfPages,
+  }) async {
+    final doc = db.collection('deleted').doc(bookId);
+
+    final json = {
+      'bookId': bookId,
+      'title': title,
+      'author': author,
+      'publisher': publisher,
+      'description': description,
+      'noOfPages': noOfPages,
+      'deletedAt': time,
+    };
+
+    doc.set(json);
+  }
+}
