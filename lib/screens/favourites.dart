@@ -25,16 +25,22 @@ class Favourites extends StatelessWidget {
               allBooks = booksData as List<Map<String, dynamic>>;
               List<Map<String, dynamic>> favouriteBooks = [];
               favouriteBooks = allBooks.where((element) => element['favourites'].contains(user.uid)).toList();
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 20.0),
-                child: ListView.builder(
-                  itemCount: favouriteBooks.length,
-                  itemBuilder: (context, index) {
-                    final data = favouriteBooks[index];
-                    return BookListTile(data: data);
-                  },
-                ),
-              );
+              if (favouriteBooks.isNotEmpty) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: ListView.builder(
+                    itemCount: favouriteBooks.length,
+                    itemBuilder: (context, index) {
+                      final data = favouriteBooks[index];
+                      return BookListTile(data: data);
+                    },
+                  ),
+                );
+              } else {
+                return const Center(
+                  child: Text('Long press on a book to start adding favourites'),
+                );
+              }
             } else {
               return Center(
                 child: Container(

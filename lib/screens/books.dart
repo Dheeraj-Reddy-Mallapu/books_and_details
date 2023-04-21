@@ -1,4 +1,3 @@
-import 'package:books_and_details/color_scheme.dart/custom_color.g.dart';
 import 'package:books_and_details/screens/search.dart';
 import 'package:books_and_details/services/database.dart';
 import 'package:books_and_details/shared_preferences.dart';

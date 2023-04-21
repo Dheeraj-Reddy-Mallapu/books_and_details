@@ -11,6 +11,7 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   TextEditingController searchInput = TextEditingController();
+  String searchInputText = '';
   @override
   Widget build(BuildContext context) {
     final db = FireStore();
@@ -26,6 +27,11 @@ class _SearchState extends State<Search> {
             hintText: 'Search',
             hintStyle: TextStyle(color: color.background),
           ),
+          onChanged: (value) {
+            setState(() {
+              searchInputText = value;
+            });
+          },
         ),
       ),
       body: StreamBuilder<List>(
@@ -41,7 +47,7 @@ class _SearchState extends State<Search> {
               if (searchInput.text.isEmpty) {
                 searchedBooks = allBooks;
               } else {
-                searchedBooks = allBooks.where((element) => element['title'].contains(searchInput.text)).toList();
+                searchedBooks = allBooks.where((element) => element['title'].contains(searchInputText)).toList();
               }
 
               return Padding(
