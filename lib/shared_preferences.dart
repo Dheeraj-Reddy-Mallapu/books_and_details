@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-String orderBy = 'modifiedAt';
-bool descending = true;
+String orderBy = 'title';
+bool descending = false;
 String _orderByKey = 'orderByKey';
 String _descendingKey = 'descendingKey';
 

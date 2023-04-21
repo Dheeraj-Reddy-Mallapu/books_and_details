@@ -1,4 +1,4 @@
-import 'package:books_and_details/screens/books_and_details.dart';
+import 'package:books_and_details/screens/books.dart';
 import 'package:books_and_details/screens/favourites.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
             home: const WidgetTree(),
             getPages: [
               GetPage(name: '/HomeScreen', page: () => const HomeScreen()),
-              GetPage(name: '/BooksAndDetails', page: () => const BooksAnsDetails()),
+              GetPage(name: '/BooksAndDetails', page: () => const Books()),
               GetPage(name: '/Favourites', page: () => const Favourites()),
             ],
           ),

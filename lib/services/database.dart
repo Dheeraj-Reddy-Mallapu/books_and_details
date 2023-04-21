@@ -8,6 +8,10 @@ List<Map<String, dynamic>> allBooks = [];
 class FireStore {
   final time = DateTime.now().toLocal().toString().substring(0, 19);
 
+  ///////////////////////
+  /// createBook, updateBook, deleteBook functions are for Admins.
+  ///////////////////////
+
   Future createBook({
     required String bookId,
     required String title,
@@ -15,6 +19,7 @@ class FireStore {
     required String publisher,
     required String description,
     required int noOfPages,
+    required String publishingDate,
   }) async {
     final doc = db.collection('allBooks').doc(bookId);
 
@@ -25,6 +30,7 @@ class FireStore {
       'publisher': publisher,
       'description': description,
       'noOfPages': noOfPages,
+      'publishingDate': publishingDate,
       'createdAt': time,
       'modifiedAt': time,
     };
@@ -34,14 +40,13 @@ class FireStore {
 
   Future createBookRating({
     required String bookId,
-    required int ratings,
+    required List<int> ratings,
   }) async {
     final doc = db.collection('allBooks').doc(bookId).collection('ratings').doc(user.uid);
 
     final json = {
-      'bookId': bookId,
       'ratings': ratings,
-      'createdAt': time,
+      'ratedAt': time,
     };
 
     await doc.set(json);
@@ -60,17 +65,21 @@ class FireStore {
     required String publisher,
     required String description,
     required int noOfPages,
+    required String publishingDate,
   }) async {
     final doc = db.collection('books').doc(bookId);
 
-    doc.update({
+    final json = {
       'title': title,
       'author': author,
       'publisher': publisher,
       'description': description,
       'noOfPages': noOfPages,
+      'publishingDate': publishingDate,
       'modifiedAt': time,
-    });
+    };
+
+    await doc.update(json);
   }
 
   Future deleteBook({
@@ -80,6 +89,7 @@ class FireStore {
     required String publisher,
     required String description,
     required int noOfPages,
+    required String publishingDate,
   }) async {
     final doc = db.collection('deleted').doc(bookId);
 
@@ -90,9 +100,10 @@ class FireStore {
       'publisher': publisher,
       'description': description,
       'noOfPages': noOfPages,
+      'publishingDate': publishingDate,
       'deletedAt': time,
     };
 
-    doc.set(json);
+    await doc.set(json);
   }
 }

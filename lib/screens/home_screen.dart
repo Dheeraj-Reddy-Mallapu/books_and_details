@@ -1,4 +1,4 @@
-import 'package:books_and_details/screens/books_and_details.dart';
+import 'package:books_and_details/screens/books.dart';
 import 'package:books_and_details/screens/favourites.dart';
 import 'package:books_and_details/screens/profile.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
       length: 3,
       initialIndex: 0,
       child: Scaffold(
-        body: const TabBarView(children: [BooksAnsDetails(), Favourites(), Profile()]),
+        body: const TabBarView(children: [Books(), Favourites(), Profile()]),
         bottomNavigationBar: ConvexAppBar(
           items: const [
             TabItem(icon: Icons.menu_book_rounded),

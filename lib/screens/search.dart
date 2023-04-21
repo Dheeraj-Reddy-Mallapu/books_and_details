@@ -2,9 +2,15 @@ import 'package:books_and_details/services/database.dart';
 import 'package:books_and_details/widgets/book_list_tile.dart';
 import 'package:flutter/material.dart';
 
-class Favourites extends StatelessWidget {
-  const Favourites({super.key});
+class Search extends StatefulWidget {
+  const Search({super.key});
 
+  @override
+  State<Search> createState() => _SearchState();
+}
+
+class _SearchState extends State<Search> {
+  TextEditingController searchInput = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final db = FireStore();
@@ -13,7 +19,14 @@ class Favourites extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: color.primary,
         centerTitle: true,
-        title: Text('Favourites', style: TextStyle(color: color.background)),
+        title: TextFormField(
+          controller: searchInput,
+          autofocus: true,
+          decoration: InputDecoration(
+            hintText: 'Search',
+            hintStyle: TextStyle(color: color.background),
+          ),
+        ),
       ),
       body: StreamBuilder<List>(
           stream: db.readBooks(descending: true, orderBy: 'title'),
@@ -23,14 +36,20 @@ class Favourites extends StatelessWidget {
             } else if (snapshot.hasData) {
               final booksData = snapshot.data!;
               allBooks = booksData as List<Map<String, dynamic>>;
-              List<Map<String, dynamic>> favouriteBooks = [];
-              favouriteBooks = allBooks.where((element) => element['favourites'].contains(user.uid)).toList();
+              List<Map<String, dynamic>> searchedBooks = [];
+
+              if (searchInput.text.isEmpty) {
+                searchedBooks = allBooks;
+              } else {
+                searchedBooks = allBooks.where((element) => element['title'].contains(searchInput.text)).toList();
+              }
+
               return Padding(
                 padding: const EdgeInsets.only(bottom: 20.0),
                 child: ListView.builder(
-                  itemCount: favouriteBooks.length,
+                  itemCount: searchedBooks.length,
                   itemBuilder: (context, index) {
-                    final data = favouriteBooks[index];
+                    final data = searchedBooks[index];
                     return BookListTile(data: data);
                   },
                 ),
